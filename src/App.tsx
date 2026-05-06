@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Snackbar, Alert } from '@mui/material';
 import Header from './components/Header';
 import StatusBar from './components/StatusBar';
-import SimpleControlTab from './components/SimpleControltab';
+import SimpleControlTab from './components/SimplecontrolTab';
 import DeviceInfoTab from './components/DeviceInfoTab';
 import ModbusTab from './components/ModbusTab';
 
