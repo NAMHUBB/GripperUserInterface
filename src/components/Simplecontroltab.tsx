@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Paper, Typography, Checkbox, FormControlLabel, Button, Slider, Chip } from '@mui/material';
 import { GripperState, DataPoint } from '../App';
-import GripperSVG from './GripperSVG';
-import PositionChart from './PositionChart';
-import CurrentChart from './CurrentChart';
+// 파일 탐색기의 실제 파일명(소문자)에 맞춰 import 경로 수정
+import GripperSVG from './Grippersvg'; 
+import PositionChart from './Positionchart';
+import CurrentChart from './Currentchart';
 
 interface Props {
   state: GripperState;
@@ -23,7 +24,7 @@ const InitPanel: React.FC<Props> = ({ state, updateState }) => {
       />
     );
   return (
-    <Paper sx={{ p: 2, bgcolor: '#fff', height: '100%' }}>
+    <Paper border-radius="4px" sx={{ p: 2, bgcolor: '#fff', height: '100%' }}>
       <Typography sx={{ fontSize: '0.72rem', fontWeight: 600, color: '#1976D2', mb: 1.2, pb: 0.6, borderBottom: '1px solid #E0EAF4' }}>Initialization & Status</Typography>
       <Row label="Activate" checked={state.activated} disabled={disabled} onChange={v => updateState({ activated: v, goToPosition: v ? state.goToPosition : false })} />
       <Row label="Go to Position" checked={state.goToPosition} disabled={disabled || !state.activated} onChange={v => updateState({ goToPosition: v })} />
@@ -48,7 +49,6 @@ const ControlPanel: React.FC<Props> = ({ state, updateState }) => {
   const disabled = !state.connected || !state.activated;
   const presets = [
     { label: 'OPEN', value: 0, color: '#1976D2' },
-    // { label: 'HALF', value: 128, color: '#5E35B1' },
     { label: 'CLOSE', value: 255, color: '#455A64' },
   ];
   const ParamRow: React.FC<{ label: string; value: number; color?: string; onChange: (v: number) => void }> =
@@ -60,10 +60,6 @@ const ControlPanel: React.FC<Props> = ({ state, updateState }) => {
         </Box>
         <Slider value={value} min={0} max={255} step={1} disabled={disabled} onChange={(_, v) => onChange(v as number)}
           sx={{ color, py: 0.6, '& .MuiSlider-thumb': { width: 14, height: 14 }, '& .MuiSlider-rail': { bgcolor: '#CBD8E8' } }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: -0.5 }}>
-          <Typography sx={{ fontSize: '0.65rem', color: '#90A4AE' }}>← MIN</Typography>
-          <Typography sx={{ fontSize: '0.65rem', color: '#90A4AE' }}>MAX →</Typography>
-        </Box>
       </Box>
     );
   return (
@@ -85,10 +81,6 @@ const ControlPanel: React.FC<Props> = ({ state, updateState }) => {
         </Box>
         <Slider value={state.positionRequest} min={0} max={255} step={1} disabled={disabled} onChange={(_, v) => updateState({ positionRequest: v as number })}
           sx={{ color: '#1976D2', py: 0.6, '& .MuiSlider-thumb': { width: 14, height: 14 }, '& .MuiSlider-rail': { bgcolor: '#CBD8E8' } }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: -0.5 }}>
-          <Typography sx={{ fontSize: '0.65rem', color: '#90A4AE' }}>← OPEN</Typography>
-          <Typography sx={{ fontSize: '0.65rem', color: '#90A4AE' }}>CLOSE →</Typography>
-        </Box>
       </Box>
       <Box sx={{ mt: 1.2 }}>
         <ParamRow label="Speed" value={state.speed} color="#388E3C" onChange={v => updateState({ speed: v })} />
