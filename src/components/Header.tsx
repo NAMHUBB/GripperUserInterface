@@ -35,8 +35,8 @@ const Header: React.FC<Props> = ({ tab, setTab, state, onConnect, onEStop, onRes
         },
       }}>
         <Tab label="Control" />
-        <Tab label="Device Info" />
-        <Tab label="Modbus RTU" />
+        <Tab label="Modbus" />
+        <Tab label="Device info" />
       </Tabs>
 
       <Box sx={{ flex: 1 }} />

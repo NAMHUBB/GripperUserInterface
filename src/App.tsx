@@ -13,12 +13,12 @@ export interface GripperState {
   goToPosition: boolean;
   autoRelease: boolean;
   autoReleaseDir: 'Open' | 'Close';
-  positionRequest: number;   // 0=open, 255=close
-  speed: number;
-  force: number;
-  positionEcho: number;      // 명령값 echo
-  positionActual: number;    // 실제 피드백값
-  currentActual: number;
+  positionRequest: number;   // 0=open, 100=close
+  speed: number;             // 0~100
+  force: number;             // 0~100
+  positionEcho: number;
+  positionActual: number;
+  currentActual: number;     // mA (motor current)
   objectDetected: boolean;
   fault: string | null;
   eStop: boolean;
@@ -33,6 +33,17 @@ export interface DataPoint {
 
 const MAX_PTS = 100;
 
+// EYOU PH11 spec constants (PH11B-51-C / PH11B-101-C)
+const RATED_TORQUE_NM  = 3.5;   // Nm — rated torque (PH11B-51-C)
+const PEAK_TORQUE_NM   = 17.0;  // Nm — instantaneous max (PH11B-51-C)
+// mA at full force setting (100/100), used for Nm conversion in chart
+const FULL_FORCE_MA    = 2000;  // ~2 A = rated current (approximate)
+
+export const mAtoNm = (mA: number): number =>
+  parseFloat(((mA / FULL_FORCE_MA) * RATED_TORQUE_NM).toFixed(3));
+
+export const PH11_SPEC = { rated: RATED_TORQUE_NM, peak: PEAK_TORQUE_NM };
+
 const App: React.FC = () => {
   const [tab, setTab] = useState(0);
   const [eStopAlert, setEStopAlert] = useState(false);
@@ -44,9 +55,9 @@ const App: React.FC = () => {
     goToPosition: false,
     autoRelease: false,
     autoReleaseDir: 'Open',
-    positionRequest: 0,
-    speed: 128,
-    force: 128,
+    positionRequest: 0,   // open
+    speed: 50,            // mid speed
+    force: 30,            // moderate force
     positionEcho: 0,
     positionActual: 0,
     currentActual: 0,
@@ -65,7 +76,7 @@ const App: React.FC = () => {
   const [isMoving, setIsMoving] = useState(false);
   const [elapsed, setElapsed] = useState(0);
 
-  // Gripper motion simulation
+  // Gripper motion simulation (max position = 100)
   useEffect(() => {
     if (!state.connected || !state.activated || !state.goToPosition || state.eStop) {
       setIsMoving(false);
@@ -76,20 +87,27 @@ const App: React.FC = () => {
       if (cancelled) return;
       setState(prev => {
         const diff = prev.positionRequest - prev.positionActual;
-        if (Math.abs(diff) < 2) {
+        if (Math.abs(diff) < 1) {
           setIsMoving(false);
-          return { ...prev, positionActual: prev.positionRequest, positionEcho: prev.positionRequest, currentActual: 0 };
+          return {
+            ...prev,
+            positionActual: prev.positionRequest,
+            positionEcho: prev.positionRequest,
+            currentActual: 0,
+          };
         }
         setIsMoving(true);
-        const step = (diff / Math.abs(diff)) * Math.min(Math.abs(diff), Math.max(2, (prev.speed / 255) * 10));
+        const step = (diff / Math.abs(diff)) * Math.min(Math.abs(diff), Math.max(1, (prev.speed / 100) * 5));
         const newActual = Math.round(prev.positionActual + step);
-        const noise = (Math.random() - 0.5) * 3;
+        const noise = (Math.random() - 0.5) * 2;
+        // Current proportional to force setting; FULL_FORCE_MA at force=100
+        const baseCurrent = (prev.force / 100) * FULL_FORCE_MA;
         return {
           ...prev,
           positionEcho: prev.positionRequest,
           positionActual: newActual,
-          currentActual: Math.round(100 + (prev.force / 255) * 300 + noise * 20),
-          objectDetected: newActual > 60 && newActual < 80 && Math.random() < 0.08,
+          currentActual: Math.round(Math.max(0, baseCurrent + noise * 40)),
+          objectDetected: newActual > 30 && newActual < 50 && Math.random() < 0.08,
         };
       });
     }, 60);
@@ -102,7 +120,12 @@ const App: React.FC = () => {
       setElapsed(e => e + 0.15);
       setChartData(prev => [
         ...prev.slice(-(MAX_PTS - 1)),
-        { time: elapsed, echo: state.positionEcho, actual: state.positionActual, current: state.currentActual },
+        {
+          time: elapsed,
+          echo: state.positionEcho,
+          actual: state.positionActual,
+          current: state.currentActual,
+        },
       ]);
     }, 150);
     return () => clearInterval(interval);
@@ -138,8 +161,8 @@ const App: React.FC = () => {
 
       <Box sx={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
         {tab === 0 && <SimpleControlTab state={state} updateState={updateState} chartData={chartData} isMoving={isMoving} />}
-        {tab === 1 && <DeviceInfoTab />}
-        {tab === 2 && <ModbusTab state={state} updateState={updateState} />}
+        {tab === 1 && <ModbusTab state={state} updateState={updateState} />}
+        {tab === 2 && <DeviceInfoTab />}
       </Box>
 
       <StatusBar state={state} isMoving={isMoving} />
