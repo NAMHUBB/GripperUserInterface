@@ -249,7 +249,7 @@ const ModbusTab: React.FC<Props> = ({ state, updateState }) => {
           {/* Header */}
           <Box sx={{ display: 'grid', gridTemplateColumns: '70px 90px 1fr 150px', px: 1.5, py: 0.8, bgcolor: '#F0F4F8', borderBottom: '1px solid #E0EAF4' }}>
             {['Address', 'Format', 'Comment', 'Value'].map(h => (
-              <Typography key={h} sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#5A7A9A' }}>{h}</Typography>
+              <Typography key={h} sx={{ fontSize: '0.7rem', fontWeight: 600, color: '#5A7A9A', ...(h === 'Comment' && { pl: 1.5 }) }}>{h}</Typography>
             ))}
           </Box>
 
@@ -266,7 +266,7 @@ const ModbusTab: React.FC<Props> = ({ state, updateState }) => {
                 {r.addr}
               </Typography>
               <Select defaultValue={r.format} size="small" sx={{
-                height: 22, fontSize: '0.68rem',
+                height: 22,width: '60',fontSize: '0.68rem',
                 '& .MuiSelect-select': { py: 0.2, px: 0.6 },
                 '& .MuiOutlinedInput-notchedOutline': { borderColor: '#E0EAF4' },
               }}>
@@ -274,7 +274,7 @@ const ModbusTab: React.FC<Props> = ({ state, updateState }) => {
                   <MenuItem key={f} value={f} sx={{ fontSize: '0.72rem' }}>{f}</MenuItem>
                 ))}
               </Select>
-              <Typography sx={{ fontSize: '0.75rem', color: '#1A2A3A' }}>{r.comment}</Typography>
+              <Typography sx={{ fontSize: '0.75rem', color: '#1A2A3A', pl: 1.5 }}>{r.comment}</Typography>
               <TextField defaultValue={r.value} size="small" sx={{
                 '& .MuiOutlinedInput-root': {
                   height: 22, fontSize: '0.72rem', fontFamily: 'monospace',

@@ -15,7 +15,7 @@ const CustomTooltip: React.FC<any> = ({ active, payload, label }) => {
   );
 };
 
-const CurrentChart: React.FC<{ chartData: DataPoint[] }> = ({ chartData }) => {
+const ForceChart: React.FC<{ chartData: DataPoint[] }> = ({ chartData }) => {
   const maxForce = Math.max(...chartData.map(d => d.current), 10);
   const yMax = Math.ceil(maxForce * 1.25);
 
@@ -72,4 +72,4 @@ const CurrentChart: React.FC<{ chartData: DataPoint[] }> = ({ chartData }) => {
   );
 };
 
-export default CurrentChart;
+export default ForceChart;
