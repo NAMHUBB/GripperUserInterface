@@ -18,22 +18,22 @@ const MODBUS_IDS: number[] = Array.from({ length: 255 }, (_, i) => i + 1);
 
 // ── Register definitions ──────────────────────────────────────────────────────
 const registers = [
-  { addr: 2000, format: 'Bin16', comment: 'Status',          value: '0000000000000000' },
-  { addr: 2001, format: 'Dec16', comment: 'Reserved',        value: '0' },
-  { addr: 2002, format: 'Dec16', comment: 'Fault',           value: '0' },
-  { addr: 2003, format: 'Dec16', comment: 'Position Echo',   value: '0' },
-  { addr: 2004, format: 'Dec16', comment: 'Position Actual', value: '0' },
-  { addr: 2005, format: 'Dec16', comment: 'Force Actual',    value: '0' },
-  { addr: 2006, format: 'Dec16', comment: 'Open Pos Echo',   value: '0' },
-  { addr: 2007, format: 'Dec16', comment: 'Reserved',        value: '0' },
-  { addr: 1000, format: 'Bin16', comment: 'Action Request',  value: '0' },
-  { addr: 1001, format: 'Dec16', comment: 'Reserved',        value: '0' },
-  { addr: 1002, format: 'Dec16', comment: 'Reserved',        value: '0' },
-  { addr: 1003, format: 'Dec16', comment: 'Position Set',    value: '0' },
-  { addr: 1004, format: 'Dec16', comment: 'Speed Set',       value: '0' },
-  { addr: 1005, format: 'Dec16', comment: 'Force Set',       value: '0' },
-  { addr: 1006, format: 'Dec16', comment: 'Open Pos Set',    value: '0' },
-  { addr: 1007, format: 'Dec16', comment: 'Reserved',        value: '0' },
+  { addr: 2000, format: 'Bin16', comment: 'REG_ACTION_STATUS',           value: '0000000000000000' },
+  { addr: 2001, format: 'Dec16', comment: 'RESERVED',                    value: '0' },
+  { addr: 2002, format: 'Dec16', comment: 'REG_FAULT_STATUS',            value: '0' },
+  { addr: 2003, format: 'Dec16', comment: 'REG_POSITION_ECHO(0.1deg)',   value: '0' },
+  { addr: 2004, format: 'Dec16', comment: 'REG_CURR_POSITION(0.1deg)',   value: '0' },
+  { addr: 2005, format: 'Dec16', comment: 'REG_CURR_TORQUE(0.1% TR)',    value: '0' },
+  { addr: 2006, format: 'Dec16', comment: 'RESERVED',                    value: '0' },
+  { addr: 2007, format: 'Dec16', comment: 'REG_ORIGIN_POS_ECHO(0.1deg)',value: '0' },
+  { addr: 1000, format: 'Bin16', comment: 'REG_ACTION_REQUEST',          value: '0' },
+  { addr: 1001, format: 'Dec16', comment: 'RESERVED',                    value: '0' },
+  { addr: 1002, format: 'Dec16', comment: 'RESERVED',                    value: '0' },
+  { addr: 1003, format: 'Dec16', comment: 'REG_POSITION_REQUEST(0.1deg)',value: '0' },
+  { addr: 1004, format: 'Dec16', comment: 'REG_SPEED_REQUEST(deg/s)',    value: '0' },
+  { addr: 1005, format: 'Dec16', comment: 'REG_FORCE_REQUEST(0.1% TR)', value: '0' },
+  { addr: 1006, format: 'Dec16', comment: 'REG_ACC_REQUEST(deg/s^2)',    value: '0' },
+  { addr: 1007, format: 'Dec16', comment: 'REG_ORIGIN_POS(0.1deg)',      value: '0' },
 ];
 
 // ── Shared styles ─────────────────────────────────────────────────────────────

@@ -11,9 +11,6 @@ const MODEL_SPECS = [
   { key: 'Speed Ratio',               value: '51 : 1',   highlight: false },
   { key: 'Rated Power',               value: '50 W',     highlight: false },
   { key: 'Working Voltage',           value: '24 ~ 36 V',highlight: false },
-];
-
-const COMMON_SPECS = [
   { key: 'Motor Type',       value: 'Inner Rotor Torque Motor' },
   { key: 'Communication',   value: 'CANopen'                  },
   { key: 'Encoder Type',    value: 'Dual Magnetic Encoder'    },
@@ -110,17 +107,6 @@ const DeviceInfoTab: React.FC = () => (
 
       {/* 오른쪽: 공통 사양 */}
       <Box>
-
-        <Box sx={{ border: `1px solid ${LINE}`, borderRadius: 2, overflow: 'hidden', px: 2 }}>
-          {COMMON_SPECS.map((s, i) => (
-            <SpecRow
-              key={s.key}
-              label={s.key}
-              value={s.value}
-              last={i === COMMON_SPECS.length - 1}
-            />
-          ))}
-        </Box>
       </Box>
     </Box>
   </Box>
