@@ -53,7 +53,7 @@ const INITIAL_STATE: GripperState = {
   stopBit:         '1',
   parity:          'None',
   slaveId:         1,
-  termResistor:    true,
+  termResistor:    false,
   activated:       false,
   goToPosition:    false,
   autoRelease:     false,

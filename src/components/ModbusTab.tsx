@@ -80,9 +80,9 @@ const ModbusTab: React.FC<Props> = ({ state, updateState }) => {
 
   // Default: reset draft AND global state
   const handleDefault = () => {
-    const d = { baudRate: 115200, stopBit: '1' as const, parity: 'None' as const, slaveId: 1, termResistor: true };
+    const d = { baudRate: 115200, stopBit: '1' as const, parity: 'None' as const, slaveId: 1, termResistor: false };
     setDraft(d);
-    updateState({ baudRate: 115200, stopBit: '1', parity: 'None', slaveId: 1, termResistor: true });
+    updateState({ baudRate: 115200, stopBit: '1', parity: 'None', slaveId: 1, termResistor: false });
     flash('Reset to default');
   };
 
@@ -129,7 +129,7 @@ const ModbusTab: React.FC<Props> = ({ state, updateState }) => {
       ),
     },
     {
-      label: 'Modbus ID',
+      label: 'Slave ID',
       control: (
         <Select value={draft.slaveId} size="small" sx={{ ...selectSx, width: 80 }}
           onChange={e => setDraft(s => ({ ...s, slaveId: Number(e.target.value) }))}>
@@ -184,7 +184,7 @@ const ModbusTab: React.FC<Props> = ({ state, updateState }) => {
             { k: 'Baud Rate', v: String(state.baudRate) },
             { k: 'Stop Bit',  v: state.stopBit },
             { k: 'Parity',    v: state.parity },
-            { k: 'Modbus ID', v: String(state.slaveId) },
+            { k: 'Slave ID', v: String(state.slaveId) },
           ].map(({ k, v }) => (
             <Box key={k} sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3 }}>
               <Typography sx={{ fontSize: '0.7rem', color: '#90A4AE' }}>{k}</Typography>
