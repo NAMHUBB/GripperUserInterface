@@ -1,3 +1,4 @@
+import { invoke } from '@tauri-apps/api/core';
 import { GripperState } from './App';
 
 // ── 지원 명령어 (Robotiq 함수 기반) ──────────────────────────────────────────
@@ -278,6 +279,12 @@ async function execCommands(commands: Command[], opts: RunnerOptions, depth = 0)
         break;
       }
       case 'EMERGENCY':
+        try {
+          // ✅ 하드웨어에 즉시 E-Stop (레지스터 1000 = 0)
+          await invoke('modbus_write_single_register', { address: 1000, value: 0 });
+        } catch (err) {
+          onLog(`⚠️ E-Stop 하드웨어 쓰기 실패: ${err}`);
+        }
         updateState({ eStop: true, goToPosition: false, activated: false });
         onLog('🚨 rq_emergency_release() — E-Stop 발동');
         break;
